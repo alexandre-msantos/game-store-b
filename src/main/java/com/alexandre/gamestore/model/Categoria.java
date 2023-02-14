@@ -2,6 +2,9 @@ package com.alexandre.gamestore.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
+
 @Entity
 @Table(name = ("tb_categoria"))
 public class Categoria {
@@ -33,5 +36,18 @@ public class Categoria {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Categoria)) return false;
+        Categoria categoria = (Categoria) o;
+        return nome.equals(categoria.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome);
     }
 }
