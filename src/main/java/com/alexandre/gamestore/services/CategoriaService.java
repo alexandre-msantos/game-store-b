@@ -4,7 +4,9 @@ import com.alexandre.gamestore.model.Categoria;
 import com.alexandre.gamestore.repositories.CategoriaRepository;
 import com.alexandre.gamestore.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +24,7 @@ public class CategoriaService {
    public Categoria findById(Long id){
        Optional<Categoria> obj = categoriaRepository.findById(id);
        return obj.orElseThrow(() -> new ObjectNotFoundException(
-               "Id " + id + " não encontrado " + Categoria.class.getName()));
+               "Objeto não encontrado: " + id + " Tipo: " + Categoria.class.getName()));
    }
 
    public List<Categoria> findByName(String nome) {
@@ -30,18 +32,21 @@ public class CategoriaService {
    }
 
    public Categoria insert(Categoria categoria){
-       categoria.setNome(categoria.getNome());
        return  categoriaRepository.save(categoria);
    }
 
-   public Categoria update(Categoria categoria){
-       categoriaRepository.findById(categoria.getId());
-       categoria.setNome(categoria.getNome());
-       return categoriaRepository.save(categoria);
+   public Categoria update(Categoria obj){
+      Categoria newObj = findById(obj.getId());
+      updateData(newObj, obj);
+      return categoriaRepository.save(newObj);
+   }
+
+   private void updateData(Categoria newObj, Categoria obj){
+       newObj.setNome(obj.getNome());
    }
 
    public void delete(Long id){
-       categoriaRepository.findById(id);
+       findById(id);
        categoriaRepository.deleteById(id);
    }
 }
