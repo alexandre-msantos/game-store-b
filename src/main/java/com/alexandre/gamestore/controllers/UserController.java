@@ -26,10 +26,8 @@ public class UserController {
         return ResponseEntity.ok().body(service.findAll());
     }
 
-    /*@GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id){
-        return service.findById(id)
-                .map(obj -> ResponseEntity.ok().body(obj))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }*/
+        return ResponseEntity.ok().body(service.findById(id));
+    }
 }
