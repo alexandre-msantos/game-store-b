@@ -1,5 +1,6 @@
 package com.alexandre.gamestore.controllers;
 
+import com.alexandre.gamestore.dto.UserDTO;
 import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -22,8 +24,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
-        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<List<UserDTO>> findAll(){
+        List<User> list = service.findAll();
+        List<UserDTO> listDto = list.stream().map(obj -> new UserDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto);
     }
 
     @GetMapping(value = "/{id}")

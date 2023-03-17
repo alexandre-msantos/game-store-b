@@ -1,5 +1,6 @@
 package com.alexandre.gamestore.services.impl;
 
+import com.alexandre.gamestore.dto.UserDTO;
 import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.repositories.UserRepository;
 import com.alexandre.gamestore.services.UserService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
