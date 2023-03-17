@@ -5,12 +5,12 @@ import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.repositories.UserRepository;
 import com.alexandre.gamestore.services.UserService;
 import com.alexandre.gamestore.services.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,9 +18,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repo;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
-    public User insertUser(User user) {
-        return repo.save(user);
+    public User insertUser(UserDTO userDto) {
+        return repo.save(mapper.map(userDto, User.class));
     }
 
     @Override
