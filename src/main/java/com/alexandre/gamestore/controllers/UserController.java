@@ -4,10 +4,11 @@ import com.alexandre.gamestore.dto.UserDTO;
 import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,15 +20,16 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<User> insertUser(@RequestBody User user){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.insertUser(user));
+    public ResponseEntity<UserDTO> insertUser(@RequestBody UserDTO userDto){
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}").buildAndExpand(service.insertUser(userDto).getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
         List<User> list = service.findAll();
-        List<UserDTO> listDto = list.stream().map(obj -> new UserDTO(obj)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
+        return ResponseEntity.ok().body(list.stream().map(obj -> new UserDTO(obj)).collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/{id}")
