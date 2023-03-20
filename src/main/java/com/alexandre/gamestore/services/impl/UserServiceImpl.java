@@ -53,3 +53,5 @@ public class UserServiceImpl implements UserService {
 
     }
 }
+
+//-- Fazer tratamento de exceção para DataIntegrityViolationException quando o usuário insere email já utilizado
