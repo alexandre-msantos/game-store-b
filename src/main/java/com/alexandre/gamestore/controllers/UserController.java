@@ -37,4 +37,11 @@ public class UserController {
         UserDTO userDto = new UserDTO(service.findById(id));
         return ResponseEntity.ok().body(userDto);
     }
+
+    @PutMapping(value = "atualizar/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO){
+        userDTO.setId(id);
+        UserDTO newUserDto = new UserDTO(service.updateUser(userDTO));
+        return ResponseEntity.ok().body(newUserDto);
+    }
 }
