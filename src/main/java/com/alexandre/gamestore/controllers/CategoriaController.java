@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -20,6 +21,16 @@ public class CategoriaController {
     @PostMapping
     public ResponseEntity<Categoria> insert(@RequestBody Categoria categoria){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insert(categoria));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Categoria>> findAll(){
+        return ResponseEntity.ok().body(service.findAll());
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Categoria> findById(@PathVariable Long id){
+        return ResponseEntity.ok().body(service.findById(id));
     }
 
     @GetMapping
