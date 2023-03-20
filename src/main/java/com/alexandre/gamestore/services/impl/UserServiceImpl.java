@@ -4,6 +4,7 @@ import com.alexandre.gamestore.dto.UserDTO;
 import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.repositories.UserRepository;
 import com.alexandre.gamestore.services.UserService;
+import com.alexandre.gamestore.services.exceptions.DataIntegrityViolationException;
 import com.alexandre.gamestore.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User insertUser(UserDTO userDto) {
+        if(repo.findByEmail(userDto.getEmail()).isPresent()){
+            throw new DataIntegrityViolationException("E-mail já está em uso no sistema");
+        }
         return repo.save(mapper.map(userDto, User.class));
     }
 
