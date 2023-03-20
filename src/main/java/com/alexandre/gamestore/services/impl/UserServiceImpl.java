@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User insertUser(UserDTO userDto) {
         if(repo.findByEmail(userDto.getEmail()).isPresent()){
-            throw new DataIntegrityViolationException("E-mail já está em uso no sistema");
+            throw new DataIntegrityViolationException("O e-mail " + userDto.getEmail() + " já está em uso");
         }
         return repo.save(mapper.map(userDto, User.class));
     }
@@ -48,8 +48,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
-        return null;
+    public User updateUser(UserDTO userDTO) {
+        findById(userDTO.getId());
+        Optional<User> searchUser = repo.findByEmail(userDTO.getEmail());
+
+            if((searchUser.isPresent()) && (searchUser.get().getId() != userDTO.getId())){
+                throw new DataIntegrityViolationException("O e-mail " + userDTO.getEmail() + " já está em uso");
+            }
+            return repo.save(mapper.map(userDTO, User.class));
     }
 
     @Override
@@ -57,5 +63,3 @@ public class UserServiceImpl implements UserService {
 
     }
 }
-
-//-- Fazer tratamento de exceção para DataIntegrityViolationException quando o usuário insere email já utilizado
