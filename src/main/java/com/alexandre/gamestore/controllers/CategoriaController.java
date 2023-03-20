@@ -20,19 +20,31 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<Categoria> insert(@RequestBody Categoria categoria){
-        service.insert(categoria);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.insert(categoria));
     }
 
     @GetMapping
     public ResponseEntity<List<Categoria>> findAll(){
-        List<Categoria> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Categoria> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
+        return ResponseEntity.ok().body(service.findById(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Categoria>> findAll(){
+       return ResponseEntity.ok().body(service.findAll());
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Categoria> findById(@PathVariable Long id){
+        return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<Categoria> update(@RequestBody Categoria categoria){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.update(categoria));
+    }
 }
