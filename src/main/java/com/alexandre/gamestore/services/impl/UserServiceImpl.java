@@ -43,11 +43,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUserByNameContainingIgnoreCase(String name) {
-        return null;
-    }
-
-    @Override
     public User updateUser(UserDTO userDTO) {
         findById(userDTO.getId());
         Optional<User> searchUser = repo.findByEmail(userDTO.getEmail());
@@ -59,7 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(User user) {
-
+    public void delete(Long id) {
+        findById(id);
+        repo.deleteById(id);
     }
 }
