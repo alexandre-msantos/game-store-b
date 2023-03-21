@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class GameStoreApplicationTests {
 
     @Test
-    void contextLoads() {
+    void main() {
+        GameStoreApplication.main(new String[]{});
     }
-
 }
