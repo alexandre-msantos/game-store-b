@@ -3,6 +3,7 @@ package com.alexandre.gamestore.services.impl;
 import com.alexandre.gamestore.dto.UserDTO;
 import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.repositories.UserRepository;
+import com.alexandre.gamestore.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -48,7 +49,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllReturn() {
     }
 
     @Test
@@ -61,6 +62,21 @@ class UserServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        Mockito.when(repository.findById(Mockito.anyLong()))
+                .thenThrow(new ObjectNotFoundException(
+                        "Objeto não encontrado: " + user.getId() + " Tipo: " + User.class.getName()));
+
+        try {
+            service.findById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado: "
+                    + user.getId() + " Tipo: " + User.class.getName(), ex.getMessage());
+        }
     }
 
     @Test
