@@ -13,9 +13,11 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -45,11 +47,26 @@ class UserServiceImplTest {
     }
 
     @Test
-    void insertUser() {
+    void whenInsertUserThenReturnSucess() {
+        Mockito.when(repository.save(any())).thenReturn(user);
+        User response = service.insertUser(userDTO);
+
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
     }
 
     @Test
-    void whenFindAllReturn() {
+    void whenFindAllThenReturnAnListOfUsers() {
+        Mockito.when(repository.findAll()).thenReturn(List.of(user));
+        List<User> response = service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(User.class, response.get(0).getClass());
     }
 
     @Test
@@ -69,7 +86,6 @@ class UserServiceImplTest {
         Mockito.when(repository.findById(Mockito.anyLong()))
                 .thenThrow(new ObjectNotFoundException(
                         "Objeto não encontrado: " + user.getId() + " Tipo: " + User.class.getName()));
-
         try {
             service.findById(ID);
         }catch (Exception ex){
@@ -89,6 +105,7 @@ class UserServiceImplTest {
 
     private void startUser(){
         user = new User(ID, NAME, EMAIL, PASSWORD);
+        userDTO = new UserDTO(new User());
         optionalUser = Optional.of(new User(1L, "Alexandre Marcelino", "alexandre@email.com", "12345"));
     }
 }
