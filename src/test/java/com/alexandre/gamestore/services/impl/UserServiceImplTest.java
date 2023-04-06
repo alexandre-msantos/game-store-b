@@ -3,6 +3,7 @@ package com.alexandre.gamestore.services.impl;
 import com.alexandre.gamestore.dto.UserDTO;
 import com.alexandre.gamestore.model.User;
 import com.alexandre.gamestore.repositories.UserRepository;
+import com.alexandre.gamestore.services.exceptions.DataIntegrityViolationException;
 import com.alexandre.gamestore.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -57,6 +59,18 @@ class UserServiceImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenInsertUserThenReturnAnDataIntegrityViolationException(){
+        Mockito.when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+
+        try{
+            service.insertUser(userDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("O e-mail " + user.getEmail() + " já está em uso", ex.getMessage());
+        }
     }
 
     @Test
@@ -105,7 +119,7 @@ class UserServiceImplTest {
 
     private void startUser(){
         user = new User(ID, NAME, EMAIL, PASSWORD);
-        userDTO = new UserDTO(new User());
+        userDTO = new UserDTO(user);
         optionalUser = Optional.of(new User(1L, "Alexandre Marcelino", "alexandre@email.com", "12345"));
     }
 }
