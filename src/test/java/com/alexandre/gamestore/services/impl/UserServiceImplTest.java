@@ -144,7 +144,7 @@ class UserServiceImplTest {
 
         service.delete(ID);
 
-        Mockito.verify(repository, Mockito.times(1)).deleteById(anyLong());
+        Mockito.verify(repository, Mockito.times(1)).deleteById(ID);
     }
 
     @Test
