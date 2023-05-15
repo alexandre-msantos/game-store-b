@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User insertUser(UserDTO userDto) {
         if(repo.findByEmail(userDto.getEmail()).isPresent()){
-            throw new DataIntegrityViolationException("O e-mail " + userDto.getEmail() + " já está em uso");
+            throw new DataIntegrityViolationException(
+                    "O e-mail " + userDto.getEmail() + " já está em uso");
         }
         return repo.save(mapper.map(userDto, User.class));
     }
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
         findById(userDTO.getId());
         Optional<User> searchUser = repo.findByEmail(userDTO.getEmail());
 
-            if((searchUser.isPresent()) && (searchUser.get().getId() != userDTO.getId())){
+            if(searchUser.isPresent() && !searchUser.get().getId().equals(userDTO.getId())){
                 throw new DataIntegrityViolationException("O e-mail " + userDTO.getEmail() + " já está em uso");
             }
             return repo.save(mapper.map(userDTO, User.class));
